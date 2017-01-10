@@ -18,7 +18,8 @@ public class Lab07v110 extends Applet
 		Road.draw(g, width);
 		Random rand = new Random();
 		
-		Tree.draw(g, rand, 50, 200);
+		//Tree.draw(g, rand, 50, 200);
+		Tree.drawTrees(g, rand, 200, width);
 
 		Car car = new Car(rand.nextInt(width), rand.nextInt(200) + 100);
 		car.draw(g, randomColor(rand));
@@ -84,11 +85,14 @@ class Road
 {
 	private static Graphics g;
 	private static int width;
+
+	private static final Color skyBlue = new Color (0, 191, 255);
+
 	public static void draw(Graphics graphics, int newWidth)
 	{
 		g = graphics;
 		width = newWidth;
-		g.setColor(Color.green);
+		g.setColor(skyBlue);
 		g.fillRect(0, 0, 800, 200);
 		g.setColor(Color.gray);
 		g.fillRect(0, 200, 800, 400);
@@ -98,7 +102,6 @@ class Road
 	private static void drawSidewalk()
 	{
 		int increment = width / 10;
-		System.out.println(increment);
 		for (int i = 0; i < width; i+= increment)
 		{
 			g.setColor(Color.black);
@@ -116,7 +119,20 @@ class Tree
 	private static int y;
 	private static int treeHeight;
 
-	private static final Color brown = new Color (2,2, 2);
+	// Some custom colors because I didn't like the pre-made ones.
+	private static final Color brown = new Color (165,42,42);
+	private static final Color leafGreen = new Color (34, 139, 34);
+	
+	private static final int branchWidth = 20;
+	public static void drawTrees(Graphics graphics, Random random, int posY, int width)
+	{
+		int amountOfTrees = random.nextInt(3)+2;
+		for (int i = 0; i < amountOfTrees; i++)
+		{
+			Tree.draw(graphics, random, random.nextInt(width), posY);
+		}
+	}
+
 	public static void draw(Graphics graphics, Random random, int posX, int posY)
 	{
 		g = graphics;
@@ -124,11 +140,12 @@ class Tree
 		x = posX;
 		y = posY;
 		
-		treeHeight = rand.nextInt(50)+50;
+		treeHeight = rand.nextInt(200)+100;
 
 		drawTrunk();
 
-		for (int i = 0; i > rand.nextInt(8)+1; i++)
+		int amountOfBranches = rand.nextInt(8)+1;
+		for (int i = 0; i < amountOfBranches; i++)
 		{
 			drawBranch();
 		}
@@ -142,13 +159,31 @@ class Tree
 
 	private static void drawBranch()
 	{
-		int branchPoint = rand.nextInt(treeHeight);
+		int branchHeight = y - branchWidth - rand.nextInt(treeHeight - branchWidth);
+		
 		g.setColor(brown);
-		g.fillRect(x, y-treeHeight, 50, treeHeight);
+		int branchDistance = rand.nextInt(100);
+		//Left Side of the trunk
+		if (rand.nextBoolean())
+		{
+			int branchPosX = x - branchDistance;
+			g.fillRect(branchPosX, branchHeight, branchDistance, branchWidth);
+			drawLeaves(branchPosX, branchHeight);
+		}
+		//Right side of the trunk
+		else
+		{
+			int branchPos = x + 50;
+			g.fillRect(branchPos, branchHeight, branchDistance, branchWidth);
+			drawLeaves(branchPos + branchDistance, branchHeight);
+		}
 	}
 
-	private static void drawLeaves()
+	private static void drawLeaves(int centerX, int centerY)
 	{
-
+		g.setColor(leafGreen);
+		int leafHeight = rand.nextInt(80) + 30;
+		int leafWidth = rand.nextInt(80) + 30;
+		g.fillOval(centerX - (leafWidth / 2), centerY - (leafHeight / 2), leafWidth, leafHeight);
 	}
 }
