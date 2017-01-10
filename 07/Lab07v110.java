@@ -1,5 +1,11 @@
-// Lab07st.java
-// Student Version
+// Lab07v110.java
+// This is the 110 point version.
+// Zion Nimchuk
+// January 10, 2017
+// APCS, Chris Robinson
+// This program draws a road, 
+// cars with a randomized color and position 
+// and trees with randomized branches, height and leaf size.
 
 import java.awt.*;
 import java.applet.*;
