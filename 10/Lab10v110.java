@@ -31,7 +31,7 @@ public class Lab10v110 extends Applet
 		System.out.println(surfaceStudio.getCPU());
 		System.out.println(surfaceStudio.getPeripherals());
 		System.out.println(" The surface Studio has " + surfaceStudio.getRAM() + " GB of RAM.");
-		surfaceStudio.draw(g);
+		surfaceStudio.draw(g, 0, 0);
     }
 }
 
