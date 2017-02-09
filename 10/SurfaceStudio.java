@@ -37,6 +37,6 @@ public class SurfaceStudio extends AllInOne
         //g.fillPolygon(new int[]{293, 507, 514, 285}, new int[]{514,514,538, 538}, 4);
         g.setColor(Color.black);
         //g.drawRect(286, 538, 230, 19);
-        g.drawPolygon(new int[]{267, 279, 283, 290, 292, 284, 269}, new int[]{460, 460, 512, 515, 516, 536, 536}, 7);
+        g.drawPolygon(new int[]{267, 279, 283, 300, 292, 284, 269}, new int[]{460, 460, 512, 515, 516, 536, 536}, 7);
     }
 }
