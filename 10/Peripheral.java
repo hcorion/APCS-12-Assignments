@@ -14,4 +14,9 @@ public class Peripheral
     {
         return connector.toString();
     }
+
+    public String getName()
+    {
+        return this.getClass().getName();
+    }
 }

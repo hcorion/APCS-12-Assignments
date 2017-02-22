@@ -10,7 +10,7 @@ public class Computer
     private int ramAmount;
 
     // A list of all the peripherals a computer has.
-    private ArrayList<Peripheral> peripherals = new ArrayList<Peripheral>();
+    protected ArrayList<Peripheral> peripherals = new ArrayList<Peripheral>();
 
     public Computer ( int ramInGB, String cpu )
     {

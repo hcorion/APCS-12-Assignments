@@ -6,6 +6,10 @@ public class SurfaceStudio extends AllInOne
 
     public SurfaceStudio()
     {
+        // Creates as Surface Studio All-In-One PC with a 
+        // 4500 x 3000 screen resolution
+        // 35 GB of ram and an
+        // Intel Core i7
         super(4500, 3000, 32, "Intel Core i7");
     }
 
@@ -39,6 +43,32 @@ public class SurfaceStudio extends AllInOne
         // Draw the border
         g.setColor(Color.black);
         g.fillRoundRect(111, 62, 690-111, 460-62, 10, 10);
+
+        // We want to draw a screen of size 542x362
+        // So we need to scale the 4500x3000 display by 0.1204
+        final float screenScale = 0.1204f;
+
+        screen.draw(g, 128, 80, screenScale);
+
+        drawText(g);
+    }
+
+        
+    
+    private void drawText(Graphics g)
+    {
+        g.setColor(Color.black);
+        // Let's also put some text on the screen.
+        g.drawString ("Microsoft Surface Studio", 240, 110);
+        g.drawString(getCPU(), 240, 130);
+        g.drawString("RAM: " + getRAM() + "GB", 240, 150);
+        g.drawString("Screen Resolution: " + screen.getWidth() + " × " + screen.getHeight(), 240, 170);
+        g.drawString("Peripherals attached: ", 240, 190);
+        final int peripheralStart = 210;
+        for (int i = 0; i < peripherals.size() ; i++)
+        {
+            g.drawString(peripherals.get(i).getName() + " via " + peripherals.get(i).getConnector(), 270, peripheralStart + (i * 20) );
+        }
     }
     private void drawStands(Graphics g, int x, int y)
     {

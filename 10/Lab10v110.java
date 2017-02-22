@@ -34,4 +34,3 @@ public class Lab10v110 extends Applet
 		surfaceStudio.draw(g, 0, 0);
     }
 }
-
