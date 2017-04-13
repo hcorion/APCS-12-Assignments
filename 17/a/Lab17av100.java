@@ -22,8 +22,11 @@ public class Lab17av100
 		System.out.println("The 10th Fibonacci Number is " + Test.fibo(10));
 		skip2();
 		System.out.println("The GCF of 120 and 108 is " + Test.gcf(120,108));
+		assert(Test.gcf(120, 108) == 12);
 		skip2();
 		System.out.println("2 raised to the 8th power is " + Test.pow(2,8));
+		assert(Test.pow(2, 8) == 256);
+		assert(Test.pow(16, 5) == 1048576);
 		skip2();
 	}
 	
