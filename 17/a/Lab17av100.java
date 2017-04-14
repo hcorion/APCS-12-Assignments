@@ -1,10 +1,9 @@
 // Lab17av100.java
-// The Recursive Methods Program
-// This is the student, starting version of the Lab17a assignment.
-// Students need to write the implementations of the
-// <countUp>, <countDown>, <sum>, <fact>, <pow>, <fibo> and <gcf> methods.
+// This is the 100 point version
+// Zion Nimchuk
+// April 13, 2017
+// This program calculates sum, factorials, power, fibonnaci, gcf and counts up and down using recursive programming techniques.
 
-	      
 public class Lab17av100
 {
 	public static void main(String[] args)
@@ -22,21 +21,19 @@ public class Lab17av100
 		System.out.println("The 10th Fibonacci Number is " + Test.fibo(10));
 		skip2();
 		System.out.println("The GCF of 120 and 108 is " + Test.gcf(120,108));
-		assert(Test.gcf(120, 108) == 12);
 		skip2();
 		System.out.println("2 raised to the 8th power is " + Test.pow(2,8));
-		assert(Test.pow(2, 8) == 256);
-		assert(Test.pow(16, 5) == 1048576);
 		skip2();
+		String s = 1 + 4;
 	}
 	
 	public static void skip2()	  
-   { 
-      System.out.println("\n");
-   }
+    {
+		System.out.println("\n");
+    }
 	
 	public static void skip3()  	
-   { 	
-      System.out.println("\n\n");
-   }	
+    {
+		System.out.println("\n\n");
+    }
 }
