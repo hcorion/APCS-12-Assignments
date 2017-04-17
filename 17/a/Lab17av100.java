@@ -24,7 +24,6 @@ public class Lab17av100
 		skip2();
 		System.out.println("2 raised to the 8th power is " + Test.pow(2,8));
 		skip2();
-		String s = 1 + 4;
 	}
 	
 	public static void skip2()	  
