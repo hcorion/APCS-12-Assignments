@@ -1,16 +1,11 @@
+import java.awt.Color;
 import java.awt.Graphics;
-
-import javax.net.ssl.ExtendedSSLSession;
 
 public class SquareFractal
 {
-    // Directions
-    // 0 = Up    or North
-    // 1 = Right or East
-    // 2 = Down  or South
-    // 3 = Left  or West
-    private enum Directions {TopLeft, TopRight, BottomRight, BottomLeft};
-    //private enum 
+    private static enum Directions {TopLeft, TopRight, BottomRight, BottomLeft};
+
+    private static final int maxiteration = 10;
     private int width;
     private int height;
     private Graphics g;
@@ -23,9 +18,16 @@ public class SquareFractal
     }
     public void draw()
     {
-        drawSquare(width/4, height/4, 2);
-        final int amount = 2;
-        genFractal(4);
+        // Draw the big black center square.
+        drawSquare(width/3, height/3, 3);
+
+        g.setColor(Color.red);
+
+        // Four corners of the square.
+        for (int i = 0; i < 4; i++)
+        {
+            genFractal(Directions.values()[i]);
+        }
     }
 
     /*
@@ -33,67 +35,93 @@ public class SquareFractal
      * Generates a square fractal.
      * 
      * Arguments:
-     * iterations: The number of iterations that the fractal generates.
+     * iteration: The number of iteration that the fractal generates.
+     * direction: The direction in which this 'node' of the fractal is going.
+     * xPos:      The top left x position this fractal 'node' is located at.
+     * yPos:      The top left y position this fractal 'node' is located at.
      */
-    private void genFractal(int iterations)
+    private void genFractal(int iteration, Directions direction, int xPos, int yPos)
     {
-        iterations--;
-        if (iterations > 0)
+        iteration++;
+
+        xPos += updateX(direction, iteration);
+        yPos += updateY(direction, iteration);
+
+        drawFractalSegment(iteration, xPos, yPos);
+        
+        if (iteration < maxiteration)
         {
-            genRightFractal(iterations);
-            genLeftFractal(iterations);
-            genStraightFractal(iterations);
+            // Generate the next clockwise fractal 'node'
+            g.setColor(Color.green);   
+            genFractal(iteration, inc(direction), xPos, yPos);
+
+            // Generate the next counter-clockwise fractal 'node'
+            g.setColor(Color.blue);
+            genFractal(iteration, dec(direction), xPos, yPos);
+            
+            // Generate the next fractal 'node' going the same direction.
+            g.setColor(Color.red);
+            genFractal(iteration, direction, xPos, yPos);
         }
-        /*int scalar = scale / 2;
-        if (scalar > 0)
+    }
+
+    // Just a simple overloading method, see above genFractal for the real juicy stuff.
+    private void genFractal(Directions direction) { genFractal(0, direction, width/3, height/3); }
+
+    // Calculates how much the x position needs to change for the next fractal 'node'
+    private int updateX(Directions direction, int iteration)
+    {
+        switch (direction)
         {
-            drawSquare(width/scalar, height/scalar, scale);
-            genFractal(scalar);
-        }*/
-    }
-    private void genRightFractal(int iterations)
-    {
-        genFractal(iterations);
-        Directions direction = Directions.BottomLeft;
-        direction = Directions.values()[direction.ordinal() + 1];
-    }
-    private void genLeftFractal(int iterations)
-    {
-        genFractal(iterations);
+            case TopLeft: case BottomLeft:
+                int scale = getScale(iteration);
+                return -(width/scale);
+
+            case TopRight: case BottomRight:
+                int oldScale = getScale(iteration-1);
+                return width/oldScale;
+        }
+        throw new Error("updateX was called but an invalid direction, " + direction.toString() + ", was given.");
     }
 
-    private void genStraightFractal(int iterations)
+    // Calculates how much the y position needs to change for the next fractal 'node'
+    private int updateY(Directions direction, int iteration)
     {
-        genFractal(iterations);
+        switch (direction)
+        {
+            case TopLeft: case TopRight:
+                int scale = getScale(iteration);
+                return -(height/scale);
+
+            case BottomRight: case BottomLeft:
+                int oldScale = getScale(iteration-1);
+                return height/oldScale;
+        }
+        throw new Error("updateY was called but an invalid direction, " + direction.toString() + ", was given.");
     }
 
-    private Directions getDirection(int xPos, int yPos)
+    // Increments the direction.
+    private static final Directions inc(Directions direction)
     {
-        final int halfWidth = width / 2;
-        final int halfHeight = height / 2;
-
-        if (xPos > halfWidth && yPos > halfHeight)
-            return Directions.BottomRight;
-        else if (xPos < halfWidth && yPos < halfHeight)
+        if (direction == Directions.BottomLeft)
             return Directions.TopLeft;
-        else if (xPos > halfWidth && yPos < halfHeight)
-            return Directions.TopRight;
-        else if (xPos < halfWidth && yPos > halfHeight)
+        return Directions.values()[direction.ordinal() + 1];
+    }
+    
+    // Decrements the direction
+    private static final Directions dec(Directions direction)
+    {
+        if (direction == Directions.TopLeft)
             return Directions.BottomLeft;
-        else
-            throw new Error("Error, tried to calculate direction for invalid position: x: " + xPos + " y: " + yPos);
+        return Directions.values()[direction.ordinal() - 1];
     }
 
-    /*
-     * A simple wrapper over the fillRect method.
-     * This makes drawing of squares simpler and makes sense in this situation.
-     * Arguments:
-     * x: The top left X position
-     * y: The top left Y position
-     * scale: The size, so if scale is 4, height will be height / 4
-     */
-    private void drawSquare(int x, int y, int scale)
-    {
-        g.fillRect(x, y, width / scale, height / scale);
-    }
+    // A fancy algorithm that gives the correct scale values, ie 1 = 6 2 = 12 3 = 24 4 = 48 5 = 96...
+    private static final int getScale(int iteration) { return 3 * (int)Math.pow(2, iteration); }
+
+    //Makes drawing the fractal nicer.
+    private void drawFractalSegment(int iteration, int xPos, int yPos) { drawSquare(xPos, yPos, getScale(iteration)); }
+    
+    // A simple wrapper over the fillRect method.
+    private void drawSquare(int x, int y, int scale) { g.fillRect(x, y, width / scale, height / scale); }
 }
