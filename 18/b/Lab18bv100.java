@@ -1,6 +1,7 @@
-// Lab18bvst.java
+// Lab18bv100.java
+// Zion Nimchuk
+// April 22, 2017
 // Merging 2 Lists Into 1
-// This is the student, starting version of the Lab18b assignment.
 
 
 import java.text.Normalizer.Form;
@@ -67,45 +68,38 @@ class Array
 		System.out.println(list + "\n");
 	}
 
-	public void merge(Array that, Array theOther)
+	public void merge(Array array1, Array array2)
 	{
-		int bottomHalf = 0;
-		int topHalf = 0;
+		int arr1Index = 0;
+		int arr2Index = 0;
 		int i = 0;
-		int[] tempArray = new int[that.size() + theOther.size()];
 		
-		while (bottomHalf <= that.size()-1 && topHalf <= theOther.size()-1)
+		while (arr1Index <= array1.size()-1 && arr2Index <= array2.size()-1)
 		{
-			if (that.get(bottomHalf) <= theOther.get(topHalf))
+			if (array1.get(arr1Index) <= array2.get(arr2Index))
             {
-                tempArray[i] = that.get(bottomHalf);
-                bottomHalf++;
+				list.add(array1.get(arr1Index));
+                arr1Index++;
             }
             else
             {
-                tempArray[i] = theOther.get(topHalf);
-                topHalf++;
+				list.add(array2.get(arr2Index));
+                arr2Index++;
             }
             i++;
 		}
-		while(bottomHalf <= that.size()-1)
+		while(arr1Index <= array1.size()-1)
         {
-            tempArray[i] = that.get(bottomHalf);
+			list.add(i, array1.get(arr1Index));
             i++;
-            bottomHalf++;
+            arr1Index++;
         }
 
-		while(topHalf <= theOther.size()-1)
+		while(arr2Index <= array2.size()-1)
         {
-            tempArray[i] = theOther.get(topHalf);
+			list.add(i, array2.get(arr2Index));
             i++;
-            topHalf++;
+            arr2Index++;
         }
-		for(int val: tempArray)
-		{
-			list.add(val);
-		}
 	}
-
-
 }

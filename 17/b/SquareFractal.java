@@ -16,6 +16,7 @@ public class SquareFractal
         this.width = width;
         this.height = height;
     }
+
     public void draw()
     {
         // Draw the big black center square.
@@ -47,20 +48,18 @@ public class SquareFractal
         xPos += updateX(direction, iteration);
         yPos += updateY(direction, iteration);
 
+        setColor(direction);
         drawFractalSegment(iteration, xPos, yPos);
         
         if (iteration < maxiteration)
         {
             // Generate the next clockwise fractal 'node'
-            g.setColor(Color.green);   
             genFractal(iteration, inc(direction), xPos, yPos);
 
             // Generate the next counter-clockwise fractal 'node'
-            g.setColor(Color.blue);
             genFractal(iteration, dec(direction), xPos, yPos);
             
             // Generate the next fractal 'node' going the same direction.
-            g.setColor(Color.red);
             genFractal(iteration, direction, xPos, yPos);
         }
     }
@@ -78,8 +77,8 @@ public class SquareFractal
                 return -(width/scale);
 
             case TopRight: case BottomRight:
-                int oldScale = getScale(iteration-1);
-                return width/oldScale;
+                int previousScale = getScale(iteration-1);
+                return width/previousScale;
         }
         throw new Error("updateX was called but an invalid direction, " + direction.toString() + ", was given.");
     }
@@ -94,8 +93,8 @@ public class SquareFractal
                 return -(height/scale);
 
             case BottomRight: case BottomLeft:
-                int oldScale = getScale(iteration-1);
-                return height/oldScale;
+                int previousScale = getScale(iteration-1);
+                return height/previousScale;
         }
         throw new Error("updateY was called but an invalid direction, " + direction.toString() + ", was given.");
     }
@@ -114,6 +113,26 @@ public class SquareFractal
         if (direction == Directions.TopLeft)
             return Directions.BottomLeft;
         return Directions.values()[direction.ordinal() - 1];
+    }
+
+    // To imitate the color pattern of Justin Barakat's colored fractal.
+    private void setColor(Directions direction)
+    {
+        switch (direction)
+        {
+            case TopLeft:
+                g.setColor(Color.red);
+                break;
+            case TopRight:
+                g.setColor(Color.blue);
+                break;
+            case BottomRight:
+                g.setColor(Color.yellow);
+                break;
+            case BottomLeft:
+                g.setColor(Color.green);
+                break;
+        }
     }
 
     // A fancy algorithm that gives the correct scale values, ie 1 = 6 2 = 12 3 = 24 4 = 48 5 = 96...
